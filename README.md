@@ -6,6 +6,15 @@ Defaults to these rollups:
 - 1h resolution for 1 week
 - 1d resolution for 1 year
 
+#install
+```npm install```
+Change settings in config.json
+```node index.js```
+
+And use the API at
+```http://localhost:4000/```
+
+
 ##API
 
 ### ```GET /rrdpost/<your dataset key>/<time>/<value>```
