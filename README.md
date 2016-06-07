@@ -18,19 +18,29 @@ And use the API at
 http://localhost:4000/
 
 
-##API
+## API
 
 ## Simple usage
 ### ```GET /rrdpost/<your dataset key>/<value>```
 
 Posts <value> in the database at the current unix timestamp.
+- your dataset key: String
 - value: Float
 
-### ```GET /rrd/<your dataset key>/day```
+#### Example
+
+```GET /rrdpost/797e2518-2ca7-11e6-b67b-9e71128cae77/3.141592```
+```GET /rrdpost/mydataset/3.141592```
+
+###  ```GET /rrd/<your dataset key>/day```
 
 Returns a dataset with all values of the last day ( now -> now-24h)
 
 ### ```GET /rrd/<your dataset key>/week```
+
+#### Example
+
+```GET /rrd/797e2518-2ca7-11e6-b67b-9e71128cae77/day```
 
 Returns a dataset with all values of the last week ( now-1d -> now-7d)
 
