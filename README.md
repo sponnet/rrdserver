@@ -7,12 +7,15 @@ Defaults to these rollups:
 - 1d resolution for 1 year
 
 #install
+
 ```npm install```
-Change settings in config.json
+
+Then optionally change the settings in config.json - and then run
+
 ```node index.js```
 
 And use the API at
-```http://localhost:4000/```
+http://localhost:4000/
 
 
 ##API
