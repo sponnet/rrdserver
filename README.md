@@ -30,6 +30,7 @@ Posts <value> in the database at the current unix timestamp.
 #### Example
 
 ```GET /rrdpost/797e2518-2ca7-11e6-b67b-9e71128cae77/3.141592```
+
 ```GET /rrdpost/mydataset/3.141592```
 
 ###  ```GET /rrd/<your dataset key>/day```
