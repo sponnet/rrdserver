@@ -58,7 +58,7 @@ function saveValue(id, time, value, res) {
 			console.log('make new DB');
 			rrdb = mkdb();
 		} else {
-			console.log('DB exists', data);
+//			console.log('DB exists');
 			rrdb = mkdb(data);
 		}
 		rrdb.write(time, value);
