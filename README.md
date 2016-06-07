@@ -17,6 +17,26 @@ And use the API at
 
 ##API
 
+## Simple usage
+### ```GET /rrdpost/<your dataset key>/<value>```
+
+Posts <value> in the database at the current unix timestamp.
+- value: Float
+
+### ```GET /rrd/<your dataset key>/day```
+
+Returns a dataset with all values of the last day ( now -> now-24h)
+
+### ```GET /rrd/<your dataset key>/week```
+
+Returns a dataset with all values of the last week ( now-1d -> now-7d)
+
+### ```GET /rrd/<your dataset key>/year```
+
+Returns a dataset with all values of the last year ( now-365d -> now-7d)
+
+## Advanced usage
+
 ### ```GET /rrdpost/<your dataset key>/<time>/<value>```
 
 Posts a new time/value pair to your database
