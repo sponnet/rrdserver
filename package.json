@@ -10,9 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.7.1",
+    "crypto": "0.0.3",
     "express": "^4.13.4",
     "level": "^1.4.0",
     "node-round-robin-database": "git+https://git@github.com/sponnet/node-round-robin-database.git",
-    "node-uuid": "^1.4.7"
+    "url": "^0.11.0"
   }
 }

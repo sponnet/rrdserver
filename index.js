@@ -7,6 +7,9 @@ var DB = rrd.DB;
 var Layer = rrd.Layer;
 var path = require('path');
 var levelup = require('levelup');
+var crypto = require('crypto');
+var url = require('url');
+
 
 var db = levelup('./mydb');
 
@@ -25,6 +28,20 @@ function mkdb(data) {
 
 }
 
+function mkhash(val) {
+	return crypto.createHash('md5').update(val).digest("hex");
+};
+
+app.get('/rrdinfo/:id', function(req, res) {
+	var value = mkhash(req.params.id);
+	return res.status(200).json({
+		url: url.format({
+			protocol: req.protocol,
+			host: req.get('host'),
+			pathname: '/rrd/' + value
+		})
+	});
+});
 
 app.get('/rrdpost/:id/:value', function(req, res) {
 	saveValue(req.params.id, getTimeStamp(), req.params.value, res);
@@ -35,6 +52,8 @@ app.get('/rrdpost/:id/:time/:value', function(req, res) {
 });
 
 function saveValue(id, time, value, res) {
+
+	id = mkhash(id);
 
 	time = parseInt(time);
 	if (!time) {
@@ -51,18 +70,28 @@ function saveValue(id, time, value, res) {
 	}
 
 	var rrdb;
+	// Try to read the buffer from the DB
 	db.get(id, {
 		valueEncoding: 'binary'
 	}, (err, data) => {
+		// if (err) {
+		// 	console.log(err);
+		// 	return res.status(500).json({
+		// 		message: 'database read failed: ' + err,
+		// 	});
+		// }
+		// if value does not exist - create new buffer
 		if (err || !data) {
 			console.log('make new DB');
 			rrdb = mkdb();
 		} else {
-//			console.log('DB exists');
 			rrdb = mkdb(data);
 		}
+
+		// write new value into our buffer
 		rrdb.write(time, value);
 
+		// save buffer to DB
 		db.put(id, rrdb.buffer, {
 			valueEncoding: 'binary'
 		}, function(err) {
@@ -70,19 +99,18 @@ function saveValue(id, time, value, res) {
 
 			res.status(200).json({
 				status: 'ok',
-				id: id,
-				time: time,
-				value: value
+				// id: id,
+				// time: time,
+				// value: value
 			});
 		});
 	});
 }
 
-
-
 function getTimeStamp() {
 	return parseInt(Math.floor(Date.now() / 1000));
 }
+
 
 app.get('/rrd/:id/day', function(req, res) {
 	runquery(req.params.id, getTimeStamp() - 60 * 60 * 24, getTimeStamp(), res);

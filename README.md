@@ -21,23 +21,52 @@ http://localhost:4000/
 ## API
 
 ## Simple usage
+
+## Step 1 : post time related data
 ### ```GET /rrdpost/<your dataset key>/<value>```
 
 Posts <value> in the database at the current unix timestamp.
 - your dataset key: String
 - value: Float
 
+Your dataset key is your secret. Anyone who knows this key can write in your database.
+
 #### Example
 
-```GET /rrdpost/797e2518-2ca7-11e6-b67b-9e71128cae77/3.141592```
+```GET /rrdpost/myname.myproject.mydataset.myvalue/3.141592```
 
 ```GET /rrdpost/mydataset/3.141592```
 
-###  ```GET /rrd/<your dataset key>/day```
+
+## Step 2: find our the read-only URL for your dataset
+###  ```GET /rrdinfo/<your dataset key>/day```
+
+Will return a JSON object with the hash your read-only URL for your dataset.
+the key is the MD5 hash of your dataset key.
+You can use this URL on a public website since you cannot write your dataset with this URL.
+
+#### Example
+
+```GET /rrdinfo/myname.myproject.mydataset.myvalue```
+
+Returns
+
+```
+{
+ "hash": "797b814e1efd70476787238b1641e852",
+ "url": "http://localhost:4000/rrd/797b814e1efd70476787238b1641e852"
+}
+```
+
+## Step 3: read the data from your dataset
+
+We have 3 presets to get the data of the last day, week and year.
+
+###  ```GET /rrd/<your dataset key hash>/day```
 
 Returns a dataset with all values of the last day ( now -> now-24h)
 
-### ```GET /rrd/<your dataset key>/week```
+### ```GET /rrd/<your dataset key hash>/week```
 
 #### Example
 
@@ -45,18 +74,25 @@ Returns a dataset with all values of the last day ( now -> now-24h)
 
 Returns a dataset with all values of the last week ( now-1d -> now-7d)
 
-### ```GET /rrd/<your dataset key>/year```
+### ```GET /rrd/<your dataset key hash>/year```
 
 Returns a dataset with all values of the last year ( now-365d -> now-7d)
 
+
 ## Advanced usage
 
-### ```GET /rrdpost/<your dataset key>/<time>/<value>```
+You can post data on a given unix timestamp.
+To post a new time/value pair to your database use this syntax:
 
-Posts a new time/value pair to your database
+### ```GET /rrdpost/<your dataset key hash>/<time>/<value>```
 
-### ```GET /rrd/<your dataset key>/<start>/<end>```
+You can also query any interval of data
 
-Returns an array of values for the given interval
+### ```GET /rrd/<your dataset key hash>/<start>/<end>```
+
+Returns an array of values for the given interval where 
+- start : unix timestamp (Number)
+- end : unix timestamp (Number)
+
 
 
