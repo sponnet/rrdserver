@@ -1,10 +1,11 @@
-# timeseries round robin database
-Creates a time/value round robin database for everyday use
-Defaults to these rollups:
-	new Layer('5m', '1d'), //
-- 5m resolution for 1 day
-- 1h resolution for 1 week
-- 1d resolution for 1 year
+# Timeseries Round Robin Database
+REST API to store and query time/value pairs in a round robin database for everyday use.
+
+Data rolls from the most recent entry to -1 year with 3 rollups:
+
+- 5m resolution for 1 day ( 576 values )
+- 1h resolution for 1 week ( 168 values )
+- 1d resolution for 1 year ( 365 values )
 
 #install
 
@@ -20,8 +21,6 @@ http://localhost:4000/
 
 ## API
 
-## Simple usage
-
 ## Step 1 : post time related data
 ### ```GET /rrdpost/<your dataset key>/<value>```
 
@@ -35,10 +34,16 @@ Your dataset key is your secret. Anyone who knows this key can write in your dat
 
 ```GET /rrdpost/myname.myproject.mydataset.myvalue/3.141592```
 
-```GET /rrdpost/mydataset/3.141592```
+```GET /rrdpost/sponnet.home.livingroom.temp/23```
+
+```GET /rrdpost/sponnet.home.livingroom.hum/60```
 
 
 ## Step 2: find our the read-only URL for your dataset
+
+Since the dataset key is used to write to your dataset, we provide a read-only URL that you can use on a public website or share with other people.
+**The read only URL never changes - so this call only needs to be executed once per dataset.**
+
 ###  ```GET /rrdinfo/<your dataset key>/day```
 
 Will return a JSON object with the hash your read-only URL for your dataset.
@@ -47,14 +52,14 @@ You can use this URL on a public website since you cannot write your dataset wit
 
 #### Example
 
-```GET /rrdinfo/myname.myproject.mydataset.myvalue```
+```GET /rrdinfo/sponnet.home.livingroom.temp```
 
 Returns
 
 ```
 {
- "hash": "797b814e1efd70476787238b1641e852",
- "url": "http://localhost:4000/rrd/797b814e1efd70476787238b1641e852"
+  "hash": "959adea93e6a518da3944594e5f7674e",
+  "url": "http://localhost:4000/rrd/959adea93e6a518da3944594e5f7674e"
 }
 ```
 
@@ -81,16 +86,24 @@ Returns a dataset with all values of the last year ( now-365d -> now-7d)
 
 ## Advanced usage
 
+### Post on random times
+
 You can post data on a given unix timestamp.
 To post a new time/value pair to your database use this syntax:
 
 ### ```GET /rrdpost/<your dataset key hash>/<time>/<value>```
+
+- start : unix timestamp (Number)
+- end : unix timestamp (Number)
+
+### Query a random interval
 
 You can also query any interval of data
 
 ### ```GET /rrd/<your dataset key hash>/<start>/<end>```
 
 Returns an array of values for the given interval where 
+
 - start : unix timestamp (Number)
 - end : unix timestamp (Number)
 

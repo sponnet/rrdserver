@@ -35,6 +35,7 @@ function mkhash(val) {
 app.get('/rrdinfo/:id', function(req, res) {
 	var value = mkhash(req.params.id);
 	return res.status(200).json({
+		hash: value,
 		url: url.format({
 			protocol: req.protocol,
 			host: req.get('host'),
