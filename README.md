@@ -71,11 +71,12 @@ We have 3 presets to get the data of the last day, week and year.
 
 Returns a dataset with all values of the last day ( now -> now-24h)
 
-### ```GET /rrd/<your dataset key hash>/week```
-
 #### Example
 
-```GET /rrd/797e2518-2ca7-11e6-b67b-9e71128cae77/day```
+```GET /rrd/959adea93e6a518da3944594e5f7674e/day```
+
+
+### ```GET /rrd/<your dataset key hash>/week```
 
 Returns a dataset with all values of the last week ( now-1d -> now-7d)
 
